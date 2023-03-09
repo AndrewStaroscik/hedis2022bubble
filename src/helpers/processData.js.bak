@@ -1,0 +1,70 @@
+export default (data) => {
+  // functions to get the data in the structure wanted for the vis
+  // Will return an object with properties containing all of information 
+  // I want for the vis
+
+  let returnObj = {};
+  let filterGroups = {};
+  let areaGroups_tmp = [];
+  let typeParentList = []
+  let areaGroups = [];
+
+  // add filtergroup and the segment to the filter obj
+  filterGroups.segments = ['Commercial', 'Medicare', 'Medicaid'];
+  
+  
+  returnObj.filterGroups = filterGroups;
+  
+  // create and add the types groups
+  let typeGroups = [];
+  for (let m of data) {
+    typeGroups.push(m.type)
+  }
+  typeGroups = [... new Set(typeGroups)];
+  returnObj.filterGroups.typeGroups = {};
+
+  returnObj.filterGroups.typeGroups.name = 'codes'; 
+  returnObj.filterGroups.typeGroups.children = [];
+  
+  for (let t of typeGroups) {
+    returnObj.filterGroups.typeGroups.children.push({
+      name:t,
+      children: {}
+    })
+  }
+
+  console.log(returnObj.filterGroups.typeGroups)
+
+  for (let t of returnObj.filterGroups.typeGroups.children) {
+    let tmpArr = [];
+    for (let a of data) {
+      if (a.type == t.name) {
+        tmpArr.push(a.area);
+      }
+    }
+    tmpArr = [... new Set(tmpArr)]
+    console.log(t.name)
+    console.log(tmpArr)
+  }
+
+  // create and add the areas by type
+  // for (let m of data) {
+  //   areaGroups_tmp.push(m.area);
+  //   typeParentList.push({parent:m.type, area:m.area});
+  // }
+  // areaGroups_tmp = [... new Set(areaGroups_tmp)];
+  // typeParentList =  [... new Set(typeParentList)];
+
+  // console.log(`areaCount: ${areaGroups_tmp.length}, parentPairs count: ${typeParentList.length}`)
+
+
+
+
+  console.log(areaGroups_tmp);
+  
+
+
+
+  return returnObj;
+
+}
